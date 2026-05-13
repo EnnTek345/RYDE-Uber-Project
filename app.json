@@ -7,14 +7,15 @@
     "icon": "./assets/images/uber.svg",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "splash":{
+    "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#fffff"
     },
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "merchantId": "merchant.com.uber"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,7 +25,7 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "server",
+      "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
@@ -32,6 +33,13 @@
         "expo-router",
         {
           "origin": "https://uber.dev/"
+        }
+      ],
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.uber",
+          "enableGooglePay": true
         }
       ]
     ],

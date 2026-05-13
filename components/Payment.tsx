@@ -1,8 +1,8 @@
-import { useAuth } from "@clerk/clerk-expo";
+import { useAuth } from '@clerk/clerk-expo';
 import { useStripe } from "@stripe/stripe-react-native";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Image, Text, View } from "react-native";
+import { Alert, Image, Text, View, Platform } from "react-native";
 import { ReactNativeModal } from "react-native-modal";
 
 import CustomButton from "@/components/CustomButton";
@@ -18,7 +18,10 @@ const Payment = ({
   driverId,
   rideTime,
 }: PaymentProps) => {
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const stripe = Platform.OS !== "web" ? useStripe() : null;
+  const initPaymentSheet = stripe?.initPaymentSheet;
+  const presentPaymentSheet = stripe?.presentPaymentSheet;
+
   const {
     userAddress,
     userLongitude,
@@ -32,9 +35,13 @@ const Payment = ({
   const [success, setSuccess] = useState<boolean>(false);
 
   const openPaymentSheet = async () => {
-    await initializePaymentSheet();
+    if (Platform.OS === "web") {
+      Alert.alert("Not supported", "Payments are only available on mobile.");
+      return;
+    }
 
-    const { error } = await presentPaymentSheet();
+    await initializePaymentSheet();
+    const { error } = await presentPaymentSheet!();
 
     if (error) {
       Alert.alert(`Error code: ${error.code}`, error.message);
@@ -44,7 +51,7 @@ const Payment = ({
   };
 
   const initializePaymentSheet = async () => {
-    const { error } = await initPaymentSheet({
+    const { error } = await initPaymentSheet!({
       merchantDisplayName: "Uber",
       intentConfiguration: {
         mode: {

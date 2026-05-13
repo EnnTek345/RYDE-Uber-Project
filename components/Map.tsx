@@ -89,13 +89,10 @@ const Map = () => {
 
   return (
     <MapView
-      provider={PROVIDER_DEFAULT}
-      className="w-full h-full rounded-2xl"
-      tintColor="black"
-      showsPointsOfInterest={false}
+    provider={PROVIDER_DEFAULT}
+    style={{ width: "100%", height: "100%", borderRadius: 16 }}
       initialRegion={region}
       showsUserLocation={true}
-      userInterfaceStyle="light"
     >
       {markers.map((marker, index) => (
         <Marker
